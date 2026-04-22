@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LLM Arena Runner</title>
+    <script src="./vendor/react.development.js"></script>
+    <script src="./vendor/react-dom.development.js"></script>
+    <script src="./vendor/babel.min.js"></script>
+    <style>
+      html, body, #root {
+        height: 100%;
+        margin: 0;
+      }
+
+      body {
+        background: #0d0d0d;
+      }
+
+      #status {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 10;
+        padding: 8px 10px;
+        border-radius: 8px;
+        font: 12px/1.4 system-ui, sans-serif;
+        color: #ddd;
+        background: rgba(17, 17, 17, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="status">Loading runner...</div>
+    <div id="root"></div>
+    <script>
+      const statusEl = document.getElementById("status");
+
+      async function mount() {
+        try {
+          const response = await fetch("./llm-compare.jsx");
+          if (!response.ok) {
+            throw new Error("Unable to load llm-compare.jsx");
+          }
+
+          let source = await response.text();
+          source = source.replace(
+            'import { useState, useRef, useEffect, useCallback } from "react";',
+            "const { useState, useRef, useEffect, useCallback } = React;"
+          );
+          source = source.replace(
+            "export default function LLMComparison() {",
+            "function LLMComparison() {"
+          );
+          source += "\nwindow.LLMComparison = LLMComparison;";
+
+          const compiled = Babel.transform(source, {
+            presets: ["react"],
+            sourceType: "script",
+          }).code;
+
+          new Function(compiled)();
+
+          ReactDOM.createRoot(document.getElementById("root")).render(
+            React.createElement(window.LLMComparison)
+          );
+
+          statusEl.textContent = "Running /Users/guarav.gupta/Downloads/llm-arena/llm-compare.jsx";
+        } catch (error) {
+          console.error(error);
+          statusEl.textContent = "Failed to launch runner";
+          const pre = document.createElement("pre");
+          pre.textContent = String(error && error.stack ? error.stack : error);
+          pre.style.cssText = [
+            "color:#fff",
+            "padding:24px",
+            "font:12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace",
+            "white-space:pre-wrap",
+          ].join(";");
+          document.body.appendChild(pre);
+        }
+      }
+
+      mount();
+    </script>
+  </body>
+</html>
