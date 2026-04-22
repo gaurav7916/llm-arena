@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ApplyPilot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Local-first job application workspace</p>
+          <h1>Apply to full-time roles in the USA with prefilled forms and a clean tracker.</h1>
+          <p class="hero-text">
+            Add your resume details once, generate a safe autofill bookmarklet, and keep every role
+            organized without auto-submitting any application.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-link" href="#resume-section">Set up your profile</a>
+            <a class="ghost-link" href="#tracker-section">Track applications</a>
+          </div>
+        </div>
+        <aside class="hero-panel">
+          <div class="panel-card">
+            <p class="panel-label">How this works</p>
+            <ol class="flow-list">
+              <li>Paste resume text or fill your profile once.</li>
+              <li>Drag the generated bookmarklet to your bookmarks bar.</li>
+              <li>Open an application page and click the bookmarklet to prefill fields.</li>
+              <li>Review everything manually and click the real submit button yourself.</li>
+            </ol>
+          </div>
+        </aside>
+      </header>
+
+      <main>
+        <section class="stats-grid" aria-label="Application metrics">
+          <article class="stat-card">
+            <p class="stat-label">Tracked roles</p>
+            <p class="stat-value" id="total-jobs">0</p>
+          </article>
+          <article class="stat-card">
+            <p class="stat-label">Ready to submit</p>
+            <p class="stat-value" id="ready-jobs">0</p>
+          </article>
+          <article class="stat-card">
+            <p class="stat-label">Submitted</p>
+            <p class="stat-value" id="submitted-jobs">0</p>
+          </article>
+          <article class="stat-card">
+            <p class="stat-label">Interviewing</p>
+            <p class="stat-value" id="interview-jobs">0</p>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <div class="main-column">
+            <section class="card" id="resume-section">
+              <div class="section-heading">
+                <div>
+                  <p class="section-kicker">Resume studio</p>
+                  <h2>Build your autofill profile from your resume</h2>
+                </div>
+                <button id="parse-resume-btn" class="secondary-button" type="button">
+                  Parse resume text
+                </button>
+              </div>
+
+              <div class="callout">
+                Resume parsing stays in your browser. For PDF or DOCX resumes, paste the text here
+                once and the app will keep the structured profile in local storage.
+              </div>
+
+              <div class="form-stack">
+                <label class="field">
+                  <span>Resume text</span>
+                  <textarea
+                    id="resume-text"
+                    rows="8"
+                    placeholder="Paste resume text here to auto-populate your profile."
+                  ></textarea>
+                </label>
+
+                <div class="two-column">
+                  <label class="field">
+                    <span>First name</span>
+                    <input id="first-name" type="text" placeholder="John" />
+                  </label>
+                  <label class="field">
+                    <span>Last name</span>
+                    <input id="last-name" type="text" placeholder="Doe" />
+                  </label>
+                </div>
+
+                <div class="two-column">
+                  <label class="field">
+                    <span>Email</span>
+                    <input id="email" type="email" placeholder="john@example.com" />
+                  </label>
+                  <label class="field">
+                    <span>Phone</span>
+                    <input id="phone" type="tel" placeholder="+1 555 555 5555" />
+                  </label>
+                </div>
+
+                <div class="two-column">
+                  <label class="field">
+                    <span>Current location</span>
+                    <input id="location" type="text" placeholder="New York, NY, USA" />
+                  </label>
+                  <label class="field">
+                    <span>Preferred job title</span>
+                    <input id="job-title" type="text" placeholder="Software Engineer" />
+                  </label>
+                </div>
+
+                <div class="two-column">
+                  <label class="field">
+                    <span>LinkedIn URL</span>
+                    <input id="linkedin" type="url" placeholder="https://linkedin.com/in/..." />
+                  </label>
+                  <label class="field">
+                    <span>GitHub or portfolio URL</span>
+                    <input id="portfolio" type="url" placeholder="https://github.com/..." />
+                  </label>
+                </div>
+
+                <div class="three-column">
+                  <label class="field">
+                    <span>Years of experience</span>
+                    <input id="years-experience" type="text" placeholder="4+" />
+                  </label>
+                  <label class="field">
+                    <span>Work authorization</span>
+                    <input id="work-authorization" type="text" placeholder="Authorized to work in the USA" />
+                  </label>
+                  <label class="field">
+                    <span>Sponsorship needed</span>
+                    <select id="sponsorship">
+                      <option value="">Choose one</option>
+                      <option value="No">No</option>
+                      <option value="Yes">Yes</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="two-column">
+                  <label class="field">
+                    <span>Current company</span>
+                    <input id="current-company" type="text" placeholder="Current employer" />
+                  </label>
+                  <label class="field">
+                    <span>Highest degree / school</span>
+                    <input id="education" type="text" placeholder="B.S. Computer Science, NYU" />
+                  </label>
+                </div>
+
+                <label class="field">
+                  <span>Professional summary</span>
+                  <textarea
+                    id="summary"
+                    rows="4"
+                    placeholder="Short summary used for cover letters and long text fields."
+                  ></textarea>
+                </label>
+
+                <label class="field">
+                  <span>Skills</span>
+                  <textarea
+                    id="skills"
+                    rows="3"
+                    placeholder="JavaScript, React, Node.js, SQL, AWS"
+                  ></textarea>
+                </label>
+
+                <div class="form-actions">
+                  <button id="save-profile-btn" class="primary-button" type="button">
+                    Save profile
+                  </button>
+                  <button id="reset-profile-btn" class="text-button" type="button">
+                    Reset profile
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <section class="card" id="autofill-section">
+              <div class="section-heading">
+                <div>
+                  <p class="section-kicker">Autofill helper</p>
+                  <h2>Prefill application forms without submitting them</h2>
+                </div>
+              </div>
+
+              <div class="callout warm">
+                The generated bookmarklet only fills common text fields, textareas, radios, and
+                dropdowns. It never clicks submit. Review every page before you continue.
+              </div>
+
+              <div class="bookmarklet-box">
+                <a id="bookmarklet-link" class="bookmarklet-link" href="#">
+                  Drag this to your bookmarks bar
+                </a>
+                <button id="copy-bookmarklet-btn" class="secondary-button" type="button">
+                  Copy bookmarklet code
+                </button>
+              </div>
+
+              <div class="bookmarklet-steps">
+                <p>Use it like this:</p>
+                <ol class="flow-list compact">
+                  <li>Save your profile first.</li>
+                  <li>Drag the link above into your bookmarks bar.</li>
+                  <li>Open a US full-time job application page.</li>
+                  <li>Click the bookmarklet to prefill the form.</li>
+                  <li>Manually review and then click the page's submit button yourself.</li>
+                </ol>
+              </div>
+
+              <label class="field">
+                <span>Bookmarklet code</span>
+                <textarea id="bookmarklet-code" rows="7" readonly></textarea>
+              </label>
+            </section>
+
+            <section class="card" id="tracker-section">
+              <div class="section-heading">
+                <div>
+                  <p class="section-kicker">Application tracker</p>
+                  <h2>Keep every role organized from saved to submitted</h2>
+                </div>
+              </div>
+
+              <form id="job-form" class="form-stack">
+                <input id="job-id" type="hidden" />
+
+                <div class="two-column">
+                  <label class="field">
+                    <span>Role title</span>
+                    <input id="job-title-input" type="text" placeholder="Senior Software Engineer" required />
+                  </label>
+                  <label class="field">
+                    <span>Company</span>
+                    <input id="job-company-input" type="text" placeholder="Acme Inc." required />
+                  </label>
+                </div>
+
+                <div class="three-column">
+                  <label class="field">
+                    <span>Location</span>
+                    <input id="job-location-input" type="text" placeholder="Austin, TX" />
+                  </label>
+                  <label class="field">
+                    <span>Employment type</span>
+                    <select id="job-type-input">
+                      <option value="Full-time">Full-time</option>
+                      <option value="Internship">Internship</option>
+                      <option value="Contract">Contract</option>
+                    </select>
+                  </label>
+                  <label class="field">
+                    <span>Status</span>
+                    <select id="job-status-input">
+                      <option value="Saved">Saved</option>
+                      <option value="Ready to submit">Ready to submit</option>
+                      <option value="Submitted">Submitted</option>
+                      <option value="Interviewing">Interviewing</option>
+                      <option value="Offer">Offer</option>
+                      <option value="Rejected">Rejected</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="two-column">
+                  <label class="field">
+                    <span>Application URL</span>
+                    <input id="job-url-input" type="url" placeholder="https://company.com/careers/apply" />
+                  </label>
+                  <label class="field">
+                    <span>Portal</span>
+                    <input id="job-portal-input" type="text" placeholder="Greenhouse, Lever, Workday..." />
+                  </label>
+                </div>
+
+                <div class="two-column">
+                  <label class="field">
+                    <span>Compensation target</span>
+                    <input id="job-comp-input" type="text" placeholder="$140k-$165k" />
+                  </label>
+                  <label class="field">
+                    <span>Date you want to apply</span>
+                    <input id="job-target-date-input" type="date" />
+                  </label>
+                </div>
+
+                <label class="field">
+                  <span>Notes</span>
+                  <textarea
+                    id="job-notes-input"
+                    rows="3"
+                    placeholder="Referral, why this role matches, questions to answer before submitting."
+                  ></textarea>
+                </label>
+
+                <div class="form-actions">
+                  <button class="primary-button" type="submit">Save job</button>
+                  <button id="clear-job-form-btn" class="text-button" type="button">Clear form</button>
+                </div>
+              </form>
+
+              <div class="toolbar">
+                <label class="search-field">
+                  <span class="sr-only">Search jobs</span>
+                  <input id="job-search" type="search" placeholder="Search by role, company, portal, or note" />
+                </label>
+                <label class="filter-field">
+                  <span class="sr-only">Filter jobs by status</span>
+                  <select id="job-filter">
+                    <option value="All">All statuses</option>
+                    <option value="Saved">Saved</option>
+                    <option value="Ready to submit">Ready to submit</option>
+                    <option value="Submitted">Submitted</option>
+                    <option value="Interviewing">Interviewing</option>
+                    <option value="Offer">Offer</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
+                </label>
+              </div>
+
+              <div id="job-list" class="job-list"></div>
+            </section>
+          </div>
+
+          <aside class="side-column">
+            <section class="card side-card">
+              <div class="section-heading compact-heading">
+                <div>
+                  <p class="section-kicker">Data controls</p>
+                  <h2>Back up your progress</h2>
+                </div>
+              </div>
+
+              <div class="stacked-buttons">
+                <button id="export-data-btn" class="secondary-button" type="button">Export tracker JSON</button>
+                <label class="secondary-button upload-button" for="import-data-input">
+                  Import tracker JSON
+                </label>
+                <input id="import-data-input" type="file" accept="application/json" hidden />
+              </div>
+
+              <p class="muted">
+                Everything is stored locally in your browser unless you export it yourself.
+              </p>
+            </section>
+
+            <section class="card side-card">
+              <div class="section-heading compact-heading">
+                <div>
+                  <p class="section-kicker">Recent activity</p>
+                  <h2>What changed</h2>
+                </div>
+              </div>
+              <div id="activity-list" class="activity-list"></div>
+            </section>
+
+            <section class="card side-card">
+              <div class="section-heading compact-heading">
+                <div>
+                  <p class="section-kicker">Safety notes</p>
+                  <h2>Manual review still matters</h2>
+                </div>
+              </div>
+              <ul class="safe-list">
+                <li>Sensitive EEO questions are intentionally left for you to answer.</li>
+                <li>Some portals rename fields, so review each answer before submitting.</li>
+                <li>This app tracks what you applied to, but it does not send applications itself.</li>
+              </ul>
+            </section>
+          </aside>
+        </section>
+      </main>
+    </div>
+
+    <template id="job-card-template">
+      <article class="job-card">
+        <div class="job-card-top">
+          <div>
+            <p class="job-title"></p>
+            <p class="job-company"></p>
+          </div>
+          <span class="job-status"></span>
+        </div>
+        <div class="job-meta"></div>
+        <p class="job-notes"></p>
+        <div class="job-actions">
+          <a class="inline-link job-link" target="_blank" rel="noreferrer">Open application</a>
+          <button class="text-button edit-job-btn" type="button">Edit</button>
+          <button class="text-button advance-job-btn" type="button">Advance status</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
